@@ -4,10 +4,7 @@ import es.urjc.samples.eventsourcing.shoppingcart.coreapi.event.AddedItemEvent;
 import es.urjc.samples.eventsourcing.shoppingcart.coreapi.event.CreatedCustomerEvent;
 import es.urjc.samples.eventsourcing.shoppingcart.coreapi.event.CreatedShoppingCartEvent;
 import es.urjc.samples.eventsourcing.shoppingcart.coreapi.event.RemovedItemEvent;
-import es.urjc.samples.eventsourcing.shoppingcart.coreapi.query.AllCustomersQuery;
-import es.urjc.samples.eventsourcing.shoppingcart.coreapi.query.AllShoppingCartsQuery;
-import es.urjc.samples.eventsourcing.shoppingcart.coreapi.query.CustomerQuery;
-import es.urjc.samples.eventsourcing.shoppingcart.coreapi.query.ShoppingCartQuery;
+import es.urjc.samples.eventsourcing.shoppingcart.coreapi.query.*;
 import es.urjc.samples.eventsourcing.shoppingcart.query.customer.CustomerInfo;
 import org.axonframework.eventhandling.EventHandler;
 import org.axonframework.queryhandling.QueryHandler;
@@ -57,6 +54,9 @@ public class ShoppingCartInfoProjection {
 
         System.out.println("Item removed to shopping cart: " + shoppingCartInfo);
         shoppingCartInfoRepository.save(shoppingCartInfo);
+
+        // keep track of deleted products
+        saveDeletedProduct(cartItem.get());
     }
 
     @QueryHandler
@@ -71,6 +71,12 @@ public class ShoppingCartInfoProjection {
         return shoppingCartInfoRepository.getById(query.getCartId());
     }
 
+    @QueryHandler
+    public List<CartItemInfo> handle(DeletedProductsQuery query) {
+        System.out.println("Get deleted products query executed");
+        return cartItemInfoRepository.getByCart(query.getCartId());
+    }
+
     private Optional<CartItemInfo> getCartItem(ShoppingCartInfo shoppingCartInfo, String productId) {
         Optional<CartItemInfo> cartItem = shoppingCartInfo.getItems()
                 .stream()
@@ -78,5 +84,9 @@ public class ShoppingCartInfoProjection {
                 .findFirst();
 
         return cartItem;
+    }
+
+    private void saveDeletedProduct(CartItemInfo cartItemInfo) {
+        cartItemInfoRepository.save(cartItemInfo);
     }
 }

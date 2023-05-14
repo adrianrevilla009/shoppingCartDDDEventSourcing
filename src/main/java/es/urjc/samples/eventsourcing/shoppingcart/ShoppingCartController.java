@@ -3,7 +3,10 @@ package es.urjc.samples.eventsourcing.shoppingcart;
 import es.urjc.samples.eventsourcing.shoppingcart.coreapi.command.AddItemCommand;
 import es.urjc.samples.eventsourcing.shoppingcart.coreapi.command.RemoveItemCommand;
 import es.urjc.samples.eventsourcing.shoppingcart.coreapi.query.AllShoppingCartsQuery;
+import es.urjc.samples.eventsourcing.shoppingcart.coreapi.query.DeletedProductsQuery;
 import es.urjc.samples.eventsourcing.shoppingcart.coreapi.query.ShoppingCartQuery;
+import es.urjc.samples.eventsourcing.shoppingcart.query.product.ProductInfo;
+import es.urjc.samples.eventsourcing.shoppingcart.query.shoppingCart.CartItemInfo;
 import es.urjc.samples.eventsourcing.shoppingcart.query.shoppingCart.ShoppingCartInfo;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.messaging.responsetypes.ResponseTypes;
@@ -63,6 +66,11 @@ public class ShoppingCartController {
                         quantity
                 )
         );
+    }
+
+    @GetMapping("/{cartId}/deletedProducts")
+    public CompletableFuture<List<CartItemInfo>> getDeletedProducts(@PathVariable String cartId) {
+        return queryGateway.query(new DeletedProductsQuery(cartId), ResponseTypes.multipleInstancesOf(CartItemInfo.class));
     }
 
     /* ######################################### DOMAIN ################################## */

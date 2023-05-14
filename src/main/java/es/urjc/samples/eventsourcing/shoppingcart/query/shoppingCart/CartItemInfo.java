@@ -12,6 +12,8 @@ public class CartItemInfo {
     private int cartItemId;
     private String productId;
     private int quantity;
+    // this property is stored to track deleted products of a cart
+    private String shoppingCartId;
 
     public CartItemInfo(int cartItemId, String productId, int quantity) {
         this.cartItemId = cartItemId;
@@ -22,6 +24,13 @@ public class CartItemInfo {
     public CartItemInfo(String productId, int quantity) {
         this.productId = productId;
         this.quantity = quantity;
+    }
+
+    public CartItemInfo(int cartItemId, String productId, int quantity, String shoppingCartId) {
+        this.cartItemId = cartItemId;
+        this.productId = productId;
+        this.quantity = quantity;
+        this.shoppingCartId = shoppingCartId;
     }
 
     public int getCartItemId() {
@@ -46,6 +55,14 @@ public class CartItemInfo {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    public String getShoppingCartId() {
+        return shoppingCartId;
+    }
+
+    public void setShoppingCartId(String shoppingCartId) {
+        this.shoppingCartId = shoppingCartId;
     }
 
     @Override
