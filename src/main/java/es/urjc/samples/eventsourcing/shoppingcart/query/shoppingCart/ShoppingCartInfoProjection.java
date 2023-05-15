@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Component
 public class ShoppingCartInfoProjection {
@@ -30,11 +31,11 @@ public class ShoppingCartInfoProjection {
 
         Optional<CartItemInfo> cartItem = getCartItem(shoppingCartInfo, event.getProductId());
 
+        // keep track of deleted products
         cartItem.ifPresentOrElse(
                 item -> item.setQuantity(item.getQuantity() + event.getQuantity()),
-                () -> shoppingCartInfo.addItem(new CartItemInfo(event.getProductId(), event.getQuantity()))
+                () -> shoppingCartInfo.addItem(new CartItemInfo(event.getProductId(), event.getQuantity(), event.getCartId()))
         );
-
 
         System.out.println("Item added to shopping cart: " + shoppingCartInfo);
         shoppingCartInfoRepository.save(shoppingCartInfo);

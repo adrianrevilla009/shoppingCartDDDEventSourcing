@@ -47,7 +47,7 @@ public class ShoppingCartAggregate {
 
     @EventSourcingHandler
     public void handle(AddedItemEvent event) {
-        if (cartItemIdList.size() == 0) {
+        if (cartItemIdList == null) {
             cartItemIdList = new ArrayList<>();
         }
         this.cartId = event.getCartId();
@@ -57,7 +57,7 @@ public class ShoppingCartAggregate {
     @EventSourcingHandler
     public void handle(RemovedItemEvent event) {
         this.cartId = event.getCartId();
-        if (cartItemIdList.size() > 0 && cartItemIdList.contains(event.getProductId())) {
+        if (cartItemIdList != null && cartItemIdList.contains(event.getProductId())) {
             this.cartItemIdList.remove(event.getProductId());
         }
     }

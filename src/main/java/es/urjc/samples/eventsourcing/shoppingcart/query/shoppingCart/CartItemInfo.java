@@ -26,11 +26,13 @@ public class CartItemInfo {
         this.quantity = quantity;
     }
 
-    public CartItemInfo(int cartItemId, String productId, int quantity, String shoppingCartId) {
-        this.cartItemId = cartItemId;
+    public CartItemInfo(String productId, int quantity, String shoppingCartId) {
         this.productId = productId;
         this.quantity = quantity;
         this.shoppingCartId = shoppingCartId;
+    }
+
+    public CartItemInfo() {
     }
 
     public int getCartItemId() {
