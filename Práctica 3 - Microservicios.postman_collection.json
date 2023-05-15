@@ -1,8 +1,9 @@
 {
 	"info": {
-		"_postman_id": "01fb0f97-5f6a-4075-a31d-065bdf0508f0",
-		"name": "Práctica 3 - Microservicios",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"_postman_id": "ccdfb34e-f226-4182-9dc5-69e4a58b5c71",
+		"name": "DDD y event sourcing",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "11056725"
 	},
 	"item": [
 		{
@@ -11,7 +12,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/customers/dgomezg",
+					"raw": "http://localhost:8080/customers/01d177f4-e42b-40a8-8fdd-97260bd4e9f2",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -19,7 +20,7 @@
 					"port": "8080",
 					"path": [
 						"customers",
-						"dgomezg"
+						"01d177f4-e42b-40a8-8fdd-97260bd4e9f2"
 					]
 				}
 			},
@@ -50,8 +51,17 @@
 			"request": {
 				"method": "POST",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
-					"raw": "http://localhost:8080/customers/dgomezg/cart",
+					"raw": "http://localhost:8080/customers/6606e5c9-b5c6-4341-8b5a-1d5a9e84e375/cart",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -59,7 +69,7 @@
 					"port": "8080",
 					"path": [
 						"customers",
-						"dgomezg",
+						"6606e5c9-b5c6-4341-8b5a-1d5a9e84e375",
 						"cart"
 					]
 				}
@@ -90,14 +100,14 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:8080/carts/b16fb8a3-41bd-45d7-aeee-dde9553f8b13",
+					"raw": "localhost:8080/carts/a68bf1c7-cbb4-44cc-80d3-f9213ddde55a",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
 						"carts",
-						"b16fb8a3-41bd-45d7-aeee-dde9553f8b13"
+						"a68bf1c7-cbb4-44cc-80d3-f9213ddde55a"
 					]
 				}
 			},
@@ -119,16 +129,16 @@
 					]
 				},
 				"url": {
-					"raw": "localhost:8080/carts/b16fb8a3-41bd-45d7-aeee-dde9553f8b13/product/Product-2",
+					"raw": "localhost:8080/carts/693134a6-e900-44f0-bd37-f0cdfba46c4a/product/fe50856c-6a03-4420-bd0e-fe246f8754b2",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
 						"carts",
-						"b16fb8a3-41bd-45d7-aeee-dde9553f8b13",
+						"693134a6-e900-44f0-bd37-f0cdfba46c4a",
 						"product",
-						"Product-2"
+						"fe50856c-6a03-4420-bd0e-fe246f8754b2"
 					],
 					"query": [
 						{
@@ -147,21 +157,21 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "localhost:8080/carts/b16fb8a3-41bd-45d7-aeee-dde9553f8b13/product/Product-2?quantity=2",
+					"raw": "localhost:8080/carts/693134a6-e900-44f0-bd37-f0cdfba46c4a/product/fe50856c-6a03-4420-bd0e-fe246f8754b2?quantity=1",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
 						"carts",
-						"b16fb8a3-41bd-45d7-aeee-dde9553f8b13",
+						"693134a6-e900-44f0-bd37-f0cdfba46c4a",
 						"product",
-						"Product-2"
+						"fe50856c-6a03-4420-bd0e-fe246f8754b2"
 					],
 					"query": [
 						{
 							"key": "quantity",
-							"value": "2"
+							"value": "1"
 						}
 					]
 				}
@@ -229,6 +239,55 @@
 					"path": [
 						"products",
 						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create customer",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"fullName\": \"Adrian\",\r\n    \"address\": \"Madrid\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/customers/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"customers",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get deleted products",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/carts/693134a6-e900-44f0-bd37-f0cdfba46c4a/deletedProducts",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"carts",
+						"693134a6-e900-44f0-bd37-f0cdfba46c4a",
+						"deletedProducts"
 					]
 				}
 			},
