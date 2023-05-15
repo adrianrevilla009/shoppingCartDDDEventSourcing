@@ -6,6 +6,8 @@ import es.urjc.samples.eventsourcing.shoppingcart.coreapi.event.CreatedShoppingC
 import es.urjc.samples.eventsourcing.shoppingcart.coreapi.event.RemovedItemEvent;
 import es.urjc.samples.eventsourcing.shoppingcart.coreapi.query.*;
 import es.urjc.samples.eventsourcing.shoppingcart.query.customer.CustomerInfo;
+import es.urjc.samples.eventsourcing.shoppingcart.query.product.DeletedProductInfo;
+import es.urjc.samples.eventsourcing.shoppingcart.query.product.DeletedProductInfoRepository;
 import org.axonframework.eventhandling.EventHandler;
 import org.axonframework.queryhandling.QueryHandler;
 import org.springframework.stereotype.Component;
@@ -17,12 +19,12 @@ import java.util.UUID;
 @Component
 public class ShoppingCartInfoProjection {
     private final ShoppingCartInfoRepository shoppingCartInfoRepository;
-    private final CartItemInfoRepository cartItemInfoRepository;
+    private final DeletedProductInfoRepository deletedProductInfoRepository;
 
     public ShoppingCartInfoProjection(ShoppingCartInfoRepository shoppingCartInfoRepository,
-                                      CartItemInfoRepository cartItemInfoRepository) {
+                                      DeletedProductInfoRepository deletedProductInfoRepository) {
         this.shoppingCartInfoRepository = shoppingCartInfoRepository;
-        this.cartItemInfoRepository = cartItemInfoRepository;
+        this.deletedProductInfoRepository = deletedProductInfoRepository;
     }
 
     @EventHandler
@@ -55,9 +57,6 @@ public class ShoppingCartInfoProjection {
 
         System.out.println("Item removed to shopping cart: " + shoppingCartInfo);
         shoppingCartInfoRepository.save(shoppingCartInfo);
-
-        // keep track of deleted products
-        saveDeletedProduct(cartItem.get());
     }
 
     @QueryHandler
@@ -75,7 +74,7 @@ public class ShoppingCartInfoProjection {
     @QueryHandler
     public List<CartItemInfo> handle(DeletedProductsQuery query) {
         System.out.println("Get deleted products query executed");
-        return cartItemInfoRepository.getByCart(query.getCartId());
+        return deletedProductInfoRepository.getByCart(query.getCartId());
     }
 
     private Optional<CartItemInfo> getCartItem(ShoppingCartInfo shoppingCartInfo, String productId) {
@@ -85,9 +84,5 @@ public class ShoppingCartInfoProjection {
                 .findFirst();
 
         return cartItem;
-    }
-
-    private void saveDeletedProduct(CartItemInfo cartItemInfo) {
-        cartItemInfoRepository.save(cartItemInfo);
     }
 }

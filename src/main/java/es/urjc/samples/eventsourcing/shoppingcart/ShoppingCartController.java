@@ -1,7 +1,10 @@
 package es.urjc.samples.eventsourcing.shoppingcart;
 
 import es.urjc.samples.eventsourcing.shoppingcart.coreapi.command.AddItemCommand;
+import es.urjc.samples.eventsourcing.shoppingcart.coreapi.command.CreateDeletedProductCommand;
 import es.urjc.samples.eventsourcing.shoppingcart.coreapi.command.RemoveItemCommand;
+import es.urjc.samples.eventsourcing.shoppingcart.coreapi.event.CreatedDeletedProductEvent;
+import es.urjc.samples.eventsourcing.shoppingcart.coreapi.event.CreatedProductEvent;
 import es.urjc.samples.eventsourcing.shoppingcart.coreapi.query.AllShoppingCartsQuery;
 import es.urjc.samples.eventsourcing.shoppingcart.coreapi.query.DeletedProductsQuery;
 import es.urjc.samples.eventsourcing.shoppingcart.coreapi.query.ShoppingCartQuery;
@@ -15,6 +18,7 @@ import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
 
@@ -58,6 +62,15 @@ public class ShoppingCartController {
     public Future<Void> removeItem(@PathVariable String cartId, @PathVariable String productId, @RequestParam int quantity) {
         Assert.state(cartId != null, "Cart id cant be null");
         Assert.state(productId != null, "Product id cant be null");
+
+        commandGateway.send(
+                new CreateDeletedProductCommand(
+                        UUID.randomUUID().toString(),
+                        cartId,
+                        productId,
+                        quantity
+                )
+        );
 
         return commandGateway.send(
                 new RemoveItemCommand(
